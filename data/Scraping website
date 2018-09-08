@@ -1,0 +1,44 @@
+# import libraries
+import urllib2
+from bs4 import BeautifulSoup
+
+# specify the url
+quote_page = 'https://www.admin.ch/opc/en/classified-compilation/19110009/index.html#indexni1'
+
+# query the website and return the html to the variable 'page'
+page = urllib2.urlopen(quote_page)
+
+# parse the html using beautiful soap and store in variable `soup`
+soup = BeautifulSoup(page, 'html.parser')
+print(type(soup))
+# Take out the <div> of name and get its value
+name_box = soup.find('h1', attrs={'class': 'title smallh1'})
+print(name_box)
+
+division = name_box.text.strip() # strip() is used to remove starting and trailing
+print(division)
+
+name_box = soup.find('h2', attrs={'class': 'title'})
+print(name_box)
+
+title = name_box.text.strip()
+print(title)
+
+name_box = soup.find('h3', attrs={'class': 'title'})
+print(name_box)
+
+section = name_box.text.strip()
+print(section)
+
+name_box = soup.find('h5')
+print(name_box)
+
+a1 = name_box.text.strip()
+print(a1)
+
+name_box = soup.find('div', attrs={'class': 'collapseableArticle'})
+print(name_box)
+
+a2 = name_box.text.strip()
+print(a2)
+
