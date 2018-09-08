@@ -1,0 +1,37 @@
+{
+  "cod":"200",
+  "message":0.0049,
+  "cnt":40,
+  "list":[
+    {
+      "dt":1536429600,
+      "main":{
+        "temp":290.82,
+        "temp_min":287.941,
+        "temp_max":290.82,
+        "pressure":938.38,
+        "sea_level":1034.53,
+        "grnd_level":938.38,
+        "humidity":87,
+        "temp_kf":2.88
+      },
+      "weather":[
+        {
+          "id":800,
+          "main":"Clear",
+          "description":"clear sky",
+          "icon":"01n"
+        }
+      ],
+      "clouds":{
+        "all":0
+      },
+      "wind":{
+        "speed":0.81,
+        "deg":344.507
+      },
+      "sys":{
+        "pod":"n"
+      },
+      "dt_txt":"2018-09-08 18:00:00"
+    }
