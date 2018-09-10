@@ -64,7 +64,6 @@ def search_weather(voicecommand):
 def Q_and_A(voicecommand):
     app_id = "A87QVU-TU925YT9UR"
     client = wolframalpha.Client(app_id)
-    voicecommand = "What is the meaning of life?"
     try:
         res = client.query(voicecommand)
         result = next(res.results).text
@@ -73,7 +72,7 @@ def Q_and_A(voicecommand):
     except Exception as e:
         print("No answer. Please ask another question.")
         result = "No answer. Please ask another question."  # v
-        print(e)
+        return result
 
 
 def remove_non_ascii(text):
@@ -109,7 +108,6 @@ def scrape_admin():
         }
 
         list_of_articles.append(articles)
-        print(x)
         x = x +1
 
     with open('scrape_admin_all.txt', 'w') as file:
@@ -142,7 +140,7 @@ def search_article(voicecommand):
     # here we have marked slow=False. Which tells
     # the module that the converted audio should
     # have a high speed
-    answer = "Your search word appears in total of " + str(len(list_of_articles_numbers)) + " articles among them are , article " + ", article ,".join(list_of_articles_numbers[0:2]) + " For an overview of the whole list of articles, please check the file scrape admin.txt"
+    answer = "Your search word appears in total of " + str(len(list_of_articles_numbers)) + " articles among them are , article " + ", article ,".join(list_of_articles_numbers[0:2]) + ".. For an overview of the whole list of articles, please check the file scrape admin.txt"
 
     return answer
 
