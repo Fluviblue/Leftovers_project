@@ -7,6 +7,7 @@ json_data = requests.get(url)
 
 data = json_data.json()
 temp = data['main']['temp']
+clouds = data['weather'][0]['description']
 
 print ('Temperature:', temp,'Degrees Celsius')
-
+print ('Weather:',clouds)
