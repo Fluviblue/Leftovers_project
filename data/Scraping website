@@ -4,6 +4,9 @@ from bs4 import BeautifulSoup
 from gtts import gTTS # speech reproduction part
 import os # speech reproduction
 import json
+from unidecode import unidecode
+import speech_recognition as sr
+
 # specify the url
 quote_page = 'https://www.admin.ch/opc/en/classified-compilation/19110009/index.html#indexni1'
 
@@ -13,36 +16,10 @@ page = urllib2.urlopen(quote_page)
 # parse the html using beautiful soap and store in variable `soup`
 soup = BeautifulSoup(page, 'html.parser')
 print(type(soup))
-# Take out the <div> of name and get its value
-name_box = soup.find('h1', attrs={'class': 'title smallh1'})
-print(name_box)
 
-division = name_box.text.strip() # strip() is used to remove starting and trailing
-print(division)
 
-name_box = soup.find('h2', attrs={'class': 'title'})
-print(name_box)
-
-title = name_box.text.strip()
-print(title)
-
-name_box = soup.find('h3', attrs={'class': 'title'})
-print(name_box)
-
-section = name_box.text.strip()
-print(section)
-
-name_box = soup.find('h5')
-print(name_box)
-
-a1 = name_box.text.strip()
-print(a1)
-
-name_box = soup.find('div', attrs={'class': 'collapseableArticle'})
-print(name_box)
-
-a2 = name_box.text.strip()
-print(a2)
+def remove_non_ascii(text):
+    return unidecode(unicode(text, encoding= "utf'8"))
 
 def scrape_admin():
 
@@ -67,44 +44,53 @@ def scrape_admin():
         list_of_articles.append(articles)
         print(x)
         x = x +1
+
+    with open('scrape_admin_all.txt', 'w') as file:
+        file.write(json.dumps(list_of_articles))
+        file.close()
+
     return list_of_articles
 
 
 list_of_articles = scrape_admin()
 
-search_word= "shareholder"  # link to voice HERE
+def search_article(voicecommand):
+    search_word= voicecommand  # link to voice HERE
+
+    list_of_results=[]
+    list_of_articles_numbers= []
+
+    for article in list_of_articles:
+
+        if search_word in article["article_content"].lower().split(" "):
+            list_of_results.append(article)
+            list_of_articles_numbers.append(article["article_number"])
 
 
+    with open('scrape_admin.txt', 'w') as file:
+        file.write(json.dumps(list_of_articles_numbers))
+        file.close()
+
+    # Language in which you want to convert
+    language = 'en'
+
+    # Passing the text and language to the engine,
+    # here we have marked slow=False. Which tells
+    # the module that the converted audio should
+    # have a high speed
+    answer = "Your search word appears in total of " + str(len(list_of_articles_numbers)) + " articles among them are , article " + ", article ,".join(list_of_articles_numbers[0:2]) + " For an overview of the whole list of articles, please check the file scrape admin.txt"
+
+    myobj = gTTS(text= answer, lang=language, slow=False)
+
+    # Saving the converted audio in a mp3 file named
+    # welcome
+    myobj.save("welcome.mp3")
+    # Playing the converted file
+    return os.system("mpg321 welcome.mp3")
 
 
-list_of_results=[]
-list_of_articles_numbers= []
+recognizer = sr.Recognizer()
+microphone = sr.Microphone()
 
-for article in list_of_articles:
-
-    if search_word in article["article_content"].lower().split(" "):
-        list_of_results.append(article)
-        list_of_articles_numbers.append(article["article_number"])
-
-
-with open('scrape_admin.txt', 'w') as file:
-    file.write(json.dumps(list_of_articles_numbers))
-    file.close()
-
-# Language in which you want to convert
-language = 'en'
-
-# Passing the text and language to the engine,
-# here we have marked slow=False. Which tells
-# the module that the converted audio should
-# have a high speed
-answer = "Your search word appears in total of " + str(len(list_of_articles_numbers)) + " articles among them are , article " + ", article ,".join(list_of_articles_numbers[0:2]) + " For an overview of the whole list of articles, please check the file scrape admin.txt"
-
-myobj = gTTS(text= answer, lang=language, slow=False)
-
-# Saving the converted audio in a mp3 file named
-# welcome
-myobj.save("welcome.mp3")
-# Playing the converted file
-os.system("mpg321 welcome.mp3")
-print("Done")
+voicecommand = recognize_speech_from_mic(recognizer, microphone)
+search_article(voicecommand)
