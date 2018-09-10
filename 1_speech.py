@@ -76,14 +76,29 @@ if __name__ == "__main__":
     # Language in which you want to convert
     language = 'en'
 
+    key_words = ['weather','search']
     voicecommand = voicecommand.split()
+    while voicecommand[0].lower() not in key_words:
+        instructions = ("Please say something in 3 seconds!")
+        print(instructions)
+        time.sleep(2)
+        print('GO!')
+        voicecommand = recognize_speech_from_mic(recognizer, microphone)
+
+        print("You said: {}".format(voicecommand["transcription"]))
+        voicecommand = voicecommand["transcription"]
+        voicecommand = voicecommand.split()
+
     if voicecommand[0].lower() == 'weather':
         voicecommand = " ".join(voicecommand[1:])
-        print(voicecommand)
         answer = search_weather(voicecommand)
     if voicecommand[0].lower() == 'search':
         voicecommand = " ".join(voicecommand[1:])
         answer = search_wiki(voicecommand)
+
+
+
+
 
 
 
