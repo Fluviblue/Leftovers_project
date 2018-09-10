@@ -8,4 +8,5 @@ json_data = requests.get(url)
 data = json_data.json()
 temp = data['main']['temp']
 
-print('Temperature:', temp,'Degrees Celsius')
+print ('Temperature:', temp,'Degrees Celsius')
+
