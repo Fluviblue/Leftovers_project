@@ -36,6 +36,10 @@ def recognize_speech_from_mic(recognizer, microphone):
 
     return response
 
+def search_wiki(word):
+   definition = wikipedia.summary(word, sentences = 1)
+   return definition
+
 
 
 
@@ -52,4 +56,14 @@ if __name__ == "__main__":
 
     print("You said: {}".format(voicecommand["transcription"]))
     voicecommand = voicecommand["transcription"]
+
+    lines = voicecommand.split()
+
+    if lines[0].lower() == "wiki":
+            search_wiki(lines[1])
+    elif lines[0].lower() == 'math':
+            search_formulas(lines[1])
+
+
+
 
