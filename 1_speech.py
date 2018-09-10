@@ -50,57 +50,58 @@ def search_weather(voicecommand):
     json_data = requests.get(url)
     data = json_data.json()
     temp = data['main']['temp']
-    #print('Temperature:', temp, 'Degrees Celsius')
-    phrase = 'the Temperature is' + str(temp) + 'Degrees Celsius in' + city
-    return phrase
+    clouds = data['weather'][0]['description']
+
+    phrase1= 'the Temperature is' + str(temp) + 'Degrees Celsius in' + city + 'with' + str(clouds)
+    return phrase1
 
 if __name__ == "__main__":
+
+
 
     recognizer = sr.Recognizer()
     microphone = sr.Microphone()
 
-    instructions = ("Please say something in 3 seconds!")
-    print(instructions)
-    time.sleep(2)
-    print('GO!')
-    voicecommand = recognize_speech_from_mic(recognizer, microphone)
+    valid_voice_input = False
 
-    print("You said: {}".format(voicecommand["transcription"]))
-    voicecommand = voicecommand["transcription"]
+    key_words = ['weather', 'search','exit']
 
-    """
-    Reproduction Part
-    """
-    print(voicecommand)
-    #mytext = search_wiki(voicecommand)
-    # Language in which you want to convert
-    language = 'en'
+    while valid_voice_input == False:
 
-    key_words = ['weather','search']
-    voicecommand = voicecommand.split()
-    while voicecommand[0].lower() not in key_words:
         instructions = ("Please say something in 3 seconds!")
         print(instructions)
+
         time.sleep(2)
         print('GO!')
         voicecommand = recognize_speech_from_mic(recognizer, microphone)
 
         print("You said: {}".format(voicecommand["transcription"]))
         voicecommand = voicecommand["transcription"]
+
+        if voicecommand == None : continue
+
         voicecommand = voicecommand.split()
 
-    if voicecommand[0].lower() == 'weather':
-        voicecommand = " ".join(voicecommand[1:])
-        answer = search_weather(voicecommand)
-    if voicecommand[0].lower() == 'search':
-        voicecommand = " ".join(voicecommand[1:])
-        answer = search_wiki(voicecommand)
+        if voicecommand[0].lower() == 'weather':
+            voicecommand = " ".join(voicecommand[1:])
+            answer = search_weather(voicecommand)
+            valid_voice_input = True
+        if voicecommand[0].lower() == 'search':
+            voicecommand = " ".join(voicecommand[1:])
+            answer = search_wiki(voicecommand)
+            valid_voice_input = True
 
+        if voicecommand[0].lower() == 'exit':
+            voicecommand = " ".join(voicecommand[1:])
+            answer = "exit program"
+            valid_voice_input = True
 
-
-
-
-
+        """
+        Reproduction Part
+        """
+    #mytext = search_wiki(voicecommand)
+    # Language in which you want to convert
+    language = 'en'
 
     # Passing the text and language to the engine,
     # here we have marked slow=False. Which tells
