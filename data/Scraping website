@@ -42,3 +42,41 @@ print(name_box)
 a2 = name_box.text.strip()
 print(a2)
 
+def scrape_admin():
+
+    # specify the url
+    quote_page = 'https://www.admin.ch/opc/en/classified-compilation/19110009/index.html#indexni1'
+
+    list_articles = soup.find_all("h5")
+    list_content = soup.find_all("div", attrs = {"class" : "collapseableArticle"})
+    print("got the list")
+
+    list_of_articles = []
+
+    x = 0
+    for i in range (0, (len(list_articles) - 1)):  # exclude last article it has different format
+
+        articles = {
+            "article_name" : list_articles[i].text.strip(),   # name of the article
+            "article_number" : list_articles[i].text.strip().split(" ")[1],
+            "article_content" : list_content[i].text.strip().split('1', 1)[-1]
+        }
+
+        list_of_articles.append(articles)
+        print(x)
+        x = x +1
+    return list_of_articles
+
+list_of_articles = scrape_admin()
+
+
+search_word= voicecommand
+
+list_of_results=[]
+
+for article in list_of_articles:
+
+    if search_word in article["article_content"].lower().split(" "):
+        list_of_results.append(article)
+
+print(list_of_results)
