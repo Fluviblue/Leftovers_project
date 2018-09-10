@@ -1,0 +1,49 @@
+import requests
+from bs4 import BeautifulSoup
+
+# link to first page - without `page=`
+url = 'https://www.admin.ch/opc/en/classified-compilation/19110009/index.html#indexni1'
+
+# only for information, not used in url
+page = 0
+
+while True:
+
+    print('---', page, '---')
+
+    r = requests.get(url)
+
+    soup = BeautifulSoup(r.content, "html.parser")
+
+    # String substitution for HTML
+
+    for link in soup.find_all("a"):
+        print("<a href='>%s'>%s</a>" % (link.get("href"), link.text))
+
+    # Fetch and print general data from title class
+    general_data = soup.find_all('div', {'class' : 'title'})
+
+    for item in general_data:
+        print(item)
+        item = soup.find('div')
+        print(item.contents["h5"].text.strip())
+        """
+        a1 = item.text.strip()
+        print(a1)
+
+        item = soup.find('div', attrs={'class': 'collapseableArticle'})
+        print(item.contents[collapseableArticle].text)
+
+        a2 = item.text.strip()
+        print(a2)"""
+
+    # link to next page
+    """
+    next_page = soup.find('a', {'class': 'next'})
+
+    if next_page:
+        url = next_page.get('href')
+        page += 1
+    else:
+        break # exit `while True`
+    """
