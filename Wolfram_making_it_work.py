@@ -95,7 +95,7 @@ if __name__ == "__main__":
     myobj.save("welcome.mp3")
 
     # Playing the converted file
-    playsound('welcome.mp3')
+    os.system('mpg321 welcome.mp3')
     print("Done")
 
 
