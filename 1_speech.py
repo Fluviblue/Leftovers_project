@@ -5,6 +5,7 @@ import os # speech reproduction
 import wikipedia # wiki api
 import requests
 import wolframalpha
+
 def recognize_speech_from_mic(recognizer, microphone):
     # check that recognizer and microphone arguments are appropriate type
     if not isinstance(recognizer, sr.Recognizer):
@@ -56,18 +57,18 @@ def search_weather(voicecommand):
     return phrase1
 
 def Q_and_A(voicecommand):
-   app_id = "A87QVU-TU925YT9UR"
-   client = wolframalpha.Client(app_id)
-
-   try:
-       res = client.query(voicecommand)
-       result = next(res.results).text
-       print('I AM WORKING')
-       return result
-   except:
-       print("No answer. Please ask another question.")
-       result = "No answer. Please ask another question."  # v
-       return result
+    app_id = "A87QVU-TU925YT9UR"
+    client = wolframalpha.Client(app_id)
+    voicecommand = "What is the meaning of life?"
+    try:
+        res = client.query(voicecommand)
+        result = next(res.results).text
+        print('I AM WORKING')
+        return result
+    except Exception as e:
+        print("No answer. Please ask another question.")
+        result = "No answer. Please ask another question."  # v
+        print(e)
 
 
 if __name__ == "__main__":
