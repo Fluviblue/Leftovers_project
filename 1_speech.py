@@ -4,7 +4,7 @@ from gtts import gTTS # speech reproduction part
 import os # speech reproduction
 import wikipedia # wiki api
 import requests
-
+import wolframalpha
 def recognize_speech_from_mic(recognizer, microphone):
     # check that recognizer and microphone arguments are appropriate type
     if not isinstance(recognizer, sr.Recognizer):
@@ -55,16 +55,29 @@ def search_weather(voicecommand):
     phrase1= 'the Temperature is' + str(temp) + 'Degrees Celsius in' + city + 'with' + str(clouds)
     return phrase1
 
+def Q_and_A(voicecommand):
+   app_id = "A87QVU-TU925YT9UR"
+   client = wolframalpha.Client(app_id)
+
+   try:
+       res = client.query(voicecommand)
+       result = next(res.results).text
+       print('I AM WORKING')
+       return result
+   except:
+       print("No answer. Please ask another question.")
+       result = "No answer. Please ask another question."  # v
+       return result
+
+
 if __name__ == "__main__":
-
-
 
     recognizer = sr.Recognizer()
     microphone = sr.Microphone()
 
     valid_voice_input = False
 
-    key_words = ['weather', 'search','exit']
+    key_words = ['weather','search','exit','find']
 
     while valid_voice_input == False:
 
@@ -92,12 +105,17 @@ if __name__ == "__main__":
             valid_voice_input = True
 
         if voicecommand[0].lower() == 'exit':
-            voicecommand = " ".join(voicecommand[1:])
+            voicecommand= " ".join(voicecommand[1:])
             answer = "exit program"
             valid_voice_input = True
 
+        if voicecommand[0].lower() == 'find':
+            voicecommand= " ".join(voicecommand[1:])
+            answer = Q_and_A(voicecommand)
+            valid_voice_input = True
+
         """
-        Reproduction Part
+        Reproduction Part     
         """
     #mytext = search_wiki(voicecommand)
     # Language in which you want to convert
@@ -107,6 +125,7 @@ if __name__ == "__main__":
     # here we have marked slow=False. Which tells
     # the module that the converted audio should
     # have a high speed
+
     myobj = gTTS(text=answer, lang=language, slow=False)
 
     # Saving the converted audio in a mp3 file named
