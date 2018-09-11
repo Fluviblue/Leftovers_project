@@ -168,49 +168,53 @@ if __name__ == "__main__":
 
     valid_voice_input = False
 
-    key_words = ['weather','wiki','exit','find','article']
+    key_words = ['weather','wiki','stop','find','article']
     speak_up('How may i help you?','en')
 
+    print("Begin with while")
     while valid_voice_input == False:
         # Language in which you want to convert
        # language = 'en'
       #  instructions = ("How may I help you?")
       #  speak_up(instructions, language)
+        print("Speak Up")
         voicecommand = recognize_speech_from_mic(recognizer, microphone)
 
         print("You said: {}".format(voicecommand["transcription"]))
         voicecommand = voicecommand["transcription"]
-
         if voicecommand == None : continue
-
         voicecommand = voicecommand.split()
-
         if voicecommand[0].lower() == 'weather':
             voicecommand = " ".join(voicecommand[1:])
             answer = search_weather(voicecommand)
-            valid_voice_input = True
+            valid_voice_input = False
+            speak_up(answer, 'en')
+            speak_up('Would you like to know something else?', 'en')
+
         if voicecommand[0].lower() == 'wiki':
             voicecommand = " ".join(voicecommand[1:])
             answer = search_wiki(voicecommand)
-            valid_voice_input = True
-
-        if voicecommand[0].lower() == 'exit':
-            voicecommand= " ".join(voicecommand[1:])
-            answer = "exit program"
-            valid_voice_input = True
+            valid_voice_input = False
+            speak_up(answer, 'en')
+            speak_up('Would you like to know something else?', 'en')
 
         if voicecommand[0].lower() == 'find':
             voicecommand= " ".join(voicecommand[1:])
             answer = Q_and_A(voicecommand)
-            valid_voice_input = True
+            valid_voice_input = False
+            speak_up(answer, 'en')
+            speak_up('Would you like to know something else?', 'en')
 
         if voicecommand[0].lower() == 'article':
             voicecommand = " ".join(voicecommand[1:])
             answer = search_article(voicecommand)
+            valid_voice_input = False
+            speak_up(answer, 'en')
+            speak_up('Would you like to know something else?', 'en')
+
+        if voicecommand[0].lower() == 'stop':
+            answer = "OK good night."
+            speak_up(answer, 'en')
             valid_voice_input = True
 
-        """
-        Reproduction Part     
-        """
 
-    speak_up(answer,'en')
