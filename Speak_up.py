@@ -8,7 +8,6 @@ import requests
 def speak_up(text, language):
     myobj = gTTS(text=text, lang=language, slow=False)
     myobj.save("welcome.mp3")
-    # Playing the converted file
     os.system("mpg321 welcome.mp3")
     print("Done")
 
