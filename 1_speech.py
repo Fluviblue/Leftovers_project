@@ -10,6 +10,23 @@ from bs4 import BeautifulSoup
 import json
 from unidecode import unidecode
 
+def speak_up(text, language):
+    myobj = gTTS(text=text, lang=language, slow=False)
+    myobj.save("welcome.mp3")
+    # Playing the converted file
+    os.system("mpg321 welcome.mp3")
+    print("Done")
+
+def _on_button_press(self):
+    self.turn_on.on()
+
+def _on_button_release(self):
+    speak_up("Hope I could help. Goodbye.")
+    self.turn_off.off()
+
+def _on_button_hold(self):
+    print(f"Long button press detected -> stopping...")
+    self._keep_running = False
 
 def recognize_speech_from_mic(recognizer, microphone):
     # check that recognizer and microphone arguments are appropriate type
@@ -47,7 +64,7 @@ def recognize_speech_from_mic(recognizer, microphone):
     return response
 
 def search_wiki(word):
-   definition = wikipedia.summary(word, sentences = 3)
+   definition = wikipedia.summary(word, sentences = 2)
    return definition
 
 def search_weather(voicecommand):
@@ -151,30 +168,17 @@ if __name__ == "__main__":
 
     valid_voice_input = False
 
-    key_words = ['weather','search','exit','find','article']
+    key_words = ['weather','wiki','exit','find','article']
 
     speak_up("welcome master", "en")
-    speak up("Je m'appelle Nyx", 'fr')
-    speak up('Como posso aiutarti?', 'it')
-    speak_up("Please select a language", "ru")
-
-    voicecommand = recognize_speech_from_mic(recognizer, microphone)
-
-    speak_up("You've selected {}".format(voicecommand["transcription"]), "en")
+    speak_up("Je m'appelle Nyx", 'fr')
+    speak_up('Sono felice di vederti.', 'it')
 
     while valid_voice_input == False:
         # Language in which you want to convert
         language = 'en'
         instructions = ("How may I help you?")
-        print(instructions)
-        myobj = gTTS(text=instructions, lang=language, slow=False)
-        # Saving the converted audio in a mp3 file named
-        # welcome
-        myobj.save("welcome.mp3")
-        # Playing the converted file
-        os.system("mpg321 welcome.mp3")
-        time.sleep(2)
-        print('GO!')
+        speak_up(instructions, language)
         voicecommand = recognize_speech_from_mic(recognizer, microphone)
 
         print("You said: {}".format(voicecommand["transcription"]))
@@ -188,7 +192,7 @@ if __name__ == "__main__":
             voicecommand = " ".join(voicecommand[1:])
             answer = search_weather(voicecommand)
             valid_voice_input = True
-        if voicecommand[0].lower() == 'search':
+        if voicecommand[0].lower() == 'wiki':
             voicecommand = " ".join(voicecommand[1:])
             answer = search_wiki(voicecommand)
             valid_voice_input = True
@@ -211,19 +215,5 @@ if __name__ == "__main__":
         """
         Reproduction Part     
         """
-    #mytext = search_wiki(voicecommand)
 
-
-    # Passing the text and language to the engine,
-    # here we have marked slow=False. Which tells
-    # the module that the converted audio should
-    # have a high speed
-
-    myobj = gTTS(text=answer, lang=language, slow=False)
-
-    # Saving the converted audio in a mp3 file named
-    # welcome
-    myobj.save("welcome.mp3")
-    # Playing the converted file
-    os.system("mpg321 welcome.mp3")
-    print("Done")
+    speak_up(answer,'en')
