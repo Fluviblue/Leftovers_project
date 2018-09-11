@@ -217,4 +217,3 @@ if __name__ == "__main__":
             speak_up(answer, 'en')
             valid_voice_input = True
 
-
