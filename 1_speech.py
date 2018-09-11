@@ -47,7 +47,7 @@ def recognize_speech_from_mic(recognizer, microphone):
     return response
 
 def search_wiki(word):
-   definition = wikipedia.summary(word, sentences = 1)
+   definition = wikipedia.summary(word, sentences = 3)
    return definition
 
 def search_weather(voicecommand):
@@ -67,7 +67,6 @@ def Q_and_A(voicecommand):
     try:
         res = client.query(voicecommand)
         result = next(res.results).text
-        print('I AM WORKING')
         return result
     except Exception as e:
         print("No answer. Please ask another question.")
@@ -154,11 +153,26 @@ if __name__ == "__main__":
 
     key_words = ['weather','search','exit','find','article']
 
+    speak_up("welcome master", "en")
+    speak up("Je m'appelle Nyx", 'fr')
+    speak up('Como posso aiutarti?', 'it')
+    speak_up("Please select a language", "ru")
+
+    voicecommand = recognize_speech_from_mic(recognizer, microphone)
+
+    speak_up("You've selected {}".format(voicecommand["transcription"]), "en")
+
     while valid_voice_input == False:
-
-        instructions = ("Please say something in 3 seconds!")
+        # Language in which you want to convert
+        language = 'en'
+        instructions = ("How may I help you?")
         print(instructions)
-
+        myobj = gTTS(text=instructions, lang=language, slow=False)
+        # Saving the converted audio in a mp3 file named
+        # welcome
+        myobj.save("welcome.mp3")
+        # Playing the converted file
+        os.system("mpg321 welcome.mp3")
         time.sleep(2)
         print('GO!')
         voicecommand = recognize_speech_from_mic(recognizer, microphone)
@@ -198,8 +212,7 @@ if __name__ == "__main__":
         Reproduction Part     
         """
     #mytext = search_wiki(voicecommand)
-    # Language in which you want to convert
-    language = 'en'
+
 
     # Passing the text and language to the engine,
     # here we have marked slow=False. Which tells
