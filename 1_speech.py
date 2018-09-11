@@ -86,13 +86,13 @@ def Q_and_A(voicecommand):
         result = next(res.results).text
         return result
     except Exception as e:
-        print("No answer. Please ask another question.")
-        result = "No answer. Please ask another question."  # v
+        print("I cannot answer that please ask another question.")
+        result = "I cannot answer that please ask another question."  # v
         return result
 
 
-def remove_non_ascii(text):
-    return unidecode(unicode(text, encoding= "utf'8"))
+#def remove_non_ascii(text):
+   # return unidecode(unidecode(text, encoding= "utf-8"))
 
 def scrape_admin():
     # specify the url
@@ -169,16 +169,13 @@ if __name__ == "__main__":
     valid_voice_input = False
 
     key_words = ['weather','wiki','exit','find','article']
-
-    speak_up("welcome master", "en")
-    speak_up("Je m'appelle Nyx", 'fr')
-    speak_up('Sono felice di vederti.', 'it')
+    speak_up('How may i help you?','en')
 
     while valid_voice_input == False:
         # Language in which you want to convert
-        language = 'en'
-        instructions = ("How may I help you?")
-        speak_up(instructions, language)
+       # language = 'en'
+      #  instructions = ("How may I help you?")
+      #  speak_up(instructions, language)
         voicecommand = recognize_speech_from_mic(recognizer, microphone)
 
         print("You said: {}".format(voicecommand["transcription"]))
